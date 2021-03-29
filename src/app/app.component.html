@@ -1,0 +1,30 @@
+<div style="display: flex;flex-direction: column;height:100%;">
+	<mat-toolbar color="primary"><div style="flex:1">{{api.data.posts?.length}} Posts</div><mat-icon>feed</mat-icon></mat-toolbar>
+	<mat-sidenav-container style="flex:1">
+		<mat-sidenav position="end" mode="side" style="width:50%">
+			<mat-list>
+				<mat-list-item *ngFor="let comm of comms; index as n">
+					<p matLine style="display:flex"><span style="flex:1">{{n+1}} <b>{{comm.name}}</b></span><span>{{comm.email}}</span></p>
+					<p matLine>{{comm.body}}</p>
+				</mat-list-item>
+			</mat-list>
+			<div style="padding:10px">
+				<div style="display:flex"><a mat-icon-button><mat-icon color="primary" (click)="newComm.add=!newComm.add">{{newComm.add?'cancel':'add_circle'}}</mat-icon></a>
+					<div style="flex:1"></div><a mat-icon-button><mat-icon color="primary" (click)="save()" *ngIf="newComm.add">save</mat-icon></a>
+				</div>
+				<form *ngIf="newComm.add">
+					<mat-form-field appearance="standard" *ngFor="let fld of ['email','name','body']" style="width:100%;">
+						<mat-label>{{fld}}</mat-label><input matInput [(ngModel)]="newComm[fld]" [name]="fld">
+					</mat-form-field>
+				</form>
+			</div>
+		</mat-sidenav>
+		<mat-sidenav-content>
+			<mat-selection-list #posts [multiple]="false" (selectionChange)="selPost($event)">
+				<mat-list-option *ngFor="let post of api.data.posts" [value]="post.id">
+					<p matLine>{{post.userId}}. <b>{{post.title}}</b></p><p matLine>{{post.body}}</p>
+				</mat-list-option>
+			</mat-selection-list>
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+</div>
